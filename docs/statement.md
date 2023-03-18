@@ -6,7 +6,7 @@ Write a program in Erlang to translate CCS0 to LTS.
 ## Important
 1. (12,5) 
 Write a function with a CCS0 AST as input and LTS as output.
-    term a.0 + b.0 can be represented by the ast  {choice {prefix 'a' zero} {prefix &#180;b&#180; zero}}.
+    term a.0 + b.0 can be represented by the ast  {choice {prefix 'a' zero} {prefix 'b' zero}}.
 
 2. (5) 
 Make a server that uses the above function.
