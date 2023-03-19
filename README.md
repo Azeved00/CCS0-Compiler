@@ -4,11 +4,19 @@
 A Server &amp; a compiler to compile CCS0 to LTS
 
 ## Compiling & Running
-Compiling the program
+### Compiling And Starting the server
 
-	erlc the program, still not actually sure
+	c(server).
+	register(serveralias, server:start()).
+	
+You can chose the `serveralias` freely
  
-Running the proggram
+### Querying the server
 
- 	some shannanigan to run the program, also not sure
-  
+ 	server:translate(serveralias, AST).
+
+if you changed serveralias in the previous command don't forget to also change it in this command.
+
+### Example
+
+	server:translate(serveralias, {choise, {prefix, 'a', {prefix, 'b', zero}}, {prefix, 'c', zero}}.
