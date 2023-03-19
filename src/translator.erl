@@ -13,19 +13,29 @@
 
 
 start() ->
-    translate({prefix,'strike',{prefix, 'extinguish', zero}}).
+    translate({choise, 
+               {prefix,'strike',{prefix, 'extinguish', zero}},
+               {prefix,'teta', zero}}).
 
 
-newState(A,State) -> atom_to_list(A) ++ "." ++ State.
+newPrefix(A,State) -> atom_to_list(A) ++ "." ++ State.
+newChoise(State1,State2) -> State1 ++ " + " ++ State2.
 
 translate(zero) -> {["zero"],[],"zero"};
 translate({prefix, Action, Process}) -> 
     {States, Trans, Initial} = translate(Process),
     
-    NState = newState(Action,Initial),
+    NState = newPrefix(Action,Initial),
     
     {States ++ [NState], 
      Trans ++ [{NState,Action,Initial}], 
      NState};
-translate({choise, X, Y}) -> 
-    X.
+translate({choise, Process1, Process2}) -> 
+    {States1, Trans1, Initial1} = translate(Process1),
+    {States2, Trans2, Initial2} = translate(Process2),
+    
+    NState = newChoise(Initial1,Initial2),
+    
+    {States1 ++ States2, 
+     Trans1 ++ Trans2, 
+     NState}.
