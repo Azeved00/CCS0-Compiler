@@ -15,7 +15,7 @@ You can chose the `serveralias` freely
 
  	server:translate(serveralias, AST).
 
-if you changed serveralias in the previous command don't forget to also change it in this command.
+if you changed `serveralias` in the previous command don't forget to also change it in this command.
 
 ### Example
 
