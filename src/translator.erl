@@ -17,6 +17,9 @@ start() ->
                {prefix,'strike',{prefix, 'extinguish', zero}},
                {prefix,'teta', zero}}).
 
+%function to add a state if it doesnt exist in the states list
+addStates(S1,S2) -> 
+    lists:usort(S1++S2).
 
 newPrefix(A,State) -> atom_to_list(A) ++ "." ++ State.
 newChoise(State1,State2) -> State1 ++ " + " ++ State2.
@@ -27,7 +30,7 @@ translate({prefix, Action, Process}) ->
     
     NState = newPrefix(Action,Initial),
     
-    {States ++ [NState], 
+    {addStates(States,[NState]), 
      Trans ++ [{NState,Action,Initial}], 
      NState};
 translate({choise, Process1, Process2}) -> 
@@ -36,6 +39,6 @@ translate({choise, Process1, Process2}) ->
     
     NState = newChoise(Initial1,Initial2),
     
-    {States1 ++ States2, 
+    {addStates(States1,States2), 
      Trans1 ++ Trans2, 
      NState}.
