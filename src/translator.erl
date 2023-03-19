@@ -21,9 +21,15 @@ start() ->
 addStates(S1,S2) -> 
     lists:usort(S1++S2).
 
+%function to replace the Origin of the first transition of a list 
+alterTrans(Origin,[{_,Action,Dest}|L]) -> 
+    [{Origin,Action,Dest}|L].
+
+% helper function to create States
 newPrefix(A,State) -> atom_to_list(A) ++ "." ++ State.
 newChoise(State1,State2) -> State1 ++ " + " ++ State2.
 
+% the translation logic 
 translate(zero) -> {["zero"],[],"zero"};
 translate({prefix, Action, Process}) -> 
     {States, Trans, Initial} = translate(Process),
@@ -31,14 +37,15 @@ translate({prefix, Action, Process}) ->
     NState = newPrefix(Action,Initial),
     
     {addStates(States,[NState]), 
-     Trans ++ [{NState,Action,Initial}], 
+     [{NState,Action,Initial}] ++ Trans, 
      NState};
 translate({choise, Process1, Process2}) -> 
     {States1, Trans1, Initial1} = translate(Process1),
     {States2, Trans2, Initial2} = translate(Process2),
     
     NState = newChoise(Initial1,Initial2),
-    
+    NTrans = alterTrans(NState,Trans1) ++ alterTrans(NState,Trans2),
+
     {addStates(States1,States2), 
-     Trans1 ++ Trans2, 
+     NTrans, 
      NState}.
