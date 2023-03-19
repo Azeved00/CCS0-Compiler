@@ -1,6 +1,6 @@
 -module(client).
--export([translate/2]).
+-export([getLTS/2]).
 
 
-translate(Server, Query) ->
-    rpc:call(Server,server,translate,[Query]).
+getLTS(Server, Query) ->
+    rpc:call(Server,server,getLTS,[Query]).

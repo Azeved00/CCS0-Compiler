@@ -19,7 +19,7 @@ To start using the program first you set up the Server using :
 
 	$ erl -name client_name
 	(client_name@host)1> c(client).
-	(client_name@host)2> client:translate('server_name@host', CCS0_Expression).
+	(client_name@host)2> client:getLTS('server_name@host', CCS0_Expression).
 
 ## Example
 In the server
@@ -32,4 +32,4 @@ In the client
 	
 	$ erl -name bilbo
 	(bilbo@host)1> c(client).
-	(bilbo@host)2> client:translate('gandalf@myhost', "a.b.0").
+	(bilbo@host)2> client:getLTS('gandalf@myhost', "a.b.0").

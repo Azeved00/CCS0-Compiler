@@ -1,21 +1,21 @@
 -module(server).
 -import(translator, [translate/1]).
--export([start/0,translate/2,stop/1]).
+-export([start/0,getLTS/1,stop/0]).
 
 
 -type ast() :: {prefix, string(), ast()} | {choise, ast(), ast()}.
 
 
-start() -> spawn(fun() -> loop(0) end).
+start() -> register(server, spawn(fun() -> loop(0) end)).
 
-translate(Server, M) ->
+getLTS(M) ->
     Ref = make_ref(),
     % enviar um request ao server
-    Server ! {translate, self(), Ref, M}, % espera pela resposta e retorna-a
+    server ! {translate, self(), Ref, M}, % espera pela resposta e retorna-a
     receive {response, Ref, Result} -> Result end.
 
-stop(Server) ->
-    Server ! {stop, self()},
+stop() ->
+    server ! {stop, self()},
     ok.
 
 loop(N) -> 
