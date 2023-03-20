@@ -20,13 +20,9 @@ stop() ->
 
 loop(N) -> 
     receive
-        % comando factorial 
+        % comando translate
         {translate, From, Ref, M} ->
             From! {response, Ref, translator:main(M)}, loop(N+1);
-        % comando status
-        {status, From, Ref} ->
-            From ! {response, Ref, N},
-            loop(N);
         {stop, _, _} -> ok
    end.
 
