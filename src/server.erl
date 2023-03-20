@@ -22,7 +22,7 @@ loop(N) ->
     receive
         % comando factorial 
         {translate, From, Ref, M} ->
-            From! {response, Ref, translator:translate(M)}, loop(N+1);
+            From! {response, Ref, translator:main(M)}, loop(N+1);
         % comando status
         {status, From, Ref} ->
             From ! {response, Ref, N},

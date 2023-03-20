@@ -1,51 +1,38 @@
 -module(translator).
--export([start/0, translate/1]).
-
-% the ast of CCS0
--type ast() ::  {prefix, atom(),ast()} |
-                {choise, ast(), ast()}  |
-                zero.
-
-% a transition from s to s' with action af
--type trans() :: {string(),atom(),string()}.
-% The Lts System
--type lts() :: {[string()],[trans()],string()}.
- 
-start() -> Map = #{}.
-
-%function to add a state if it doesnt exist in the states list
-addStates(S1,S2) -> 
-    lists:usort(S1++S2).
+-export([main/1]).
 
 %function to replace the Origin of the first transition of a list 
 alterTrans(Origin,[{_,Action,Dest}|L]) -> 
     [{Origin,Action,Dest}|L].
 
-% helper function to create States
-newPrefix(A,State) -> atom_to_list(A) ++ "." ++ State.
-newChoise(State1,State2) -> "(" ++ State1 ++ " + " ++ State2 ++ ")".
-updateTab(V) -> if 
-                    maps:is_key(V,Map) ->
-                        maps:put(V, maps:size(Map)+1, Map);
-                    true ->
-                        maps:get(V,Map)
-                end.
+main(Ast) -> {Map,Trans,_} = translate(#{},Ast),
+             {Map, Trans}. 
+
+updateTab(Map, V) -> case maps:is_key(V, Map) of
+                        false ->
+                            maps:put(V, maps:size(Map)+1, Map);
+                        true -> 
+                            Map
+                        end.
 
 % the translation logic 
-translate(zero) -> {["zero"],[],"zero"};
-translate({prefix, Action, Process}) -> 
-    {States, Trans, Initial} = translate(Process),
+translate(Map, zero) -> {Map, [], zero};
+translate(Map, {prefix, Action, Process}) -> 
+    {Tab, Trans, Initial} = translate(Map,Process),
     
-    NState = newPrefix(Action,Initial),
+    NState = {prefix, Action, Process},
+    NTab =  updateTab(Tab,NState),
+    State = maps:get(NState,NTab),
+    
+    {NTab,[{State,Action,Initial}] ++ Trans, State};
+translate(Map, {choise, Process1, Process2}) -> 
+    {Tab1, Trans1, _} = translate(Map,Process1),
+    {Tab2, Trans2, _} = translate(Tab1,Process2),
+    
+    NState = {choise, Process1, Process2},
+    NTab =  updateTab(Tab2,NState),
+    State = maps:get(NState,NTab),
+    NTrans = alterTrans(State,Trans1) ++ alterTrans(State,Trans2),
 
-    Nid = updateTab({prefix, Action}),
-    
-    {addStates(States,[NState]), [{NState,Action,Initial}] ++ Trans, NState};
-translate({choise, Process1, Process2}) -> 
-    {States1, Trans1, Initial1} = translate(Process1),
-    {States2, Trans2, Initial2} = translate(Process2),
-    
-    NState = newChoise(Initial1,Initial2),
-    NTrans = alterTrans(NState,Trans1) ++ alterTrans(NState,Trans2),
+    {NTab, NTrans, State}.
 
-    {addStates(States1,States2), NTrans, NState}.
