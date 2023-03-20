@@ -10,12 +10,8 @@
 -type trans() :: {string(),atom(),string()}.
 % The Lts System
 -type lts() :: {[string()],[trans()],string()}.
-
-
-start() ->
-    translate({choise, 
-               {prefix,'strike',{prefix, 'extinguish', zero}},
-               {prefix,'teta', zero}}).
+ 
+start() -> Map = #{}.
 
 %function to add a state if it doesnt exist in the states list
 addStates(S1,S2) -> 
@@ -27,12 +23,13 @@ alterTrans(Origin,[{_,Action,Dest}|L]) ->
 
 % helper function to create States
 newPrefix(A,State) -> atom_to_list(A) ++ "." ++ State.
-<<<<<<< HEAD
-newChoise(State1,State2) -> State1 ++ " + " ++ State2.
-newState() -> .
-=======
 newChoise(State1,State2) -> "(" ++ State1 ++ " + " ++ State2 ++ ")".
->>>>>>> 7dd56cfbfed374f053a9b6020340f1463c4cc41d
+updateTab(V) -> if 
+                    maps:is_key(V,Map) ->
+                        maps:put(V, maps:size(Map)+1, Map);
+                    true ->
+                        maps:get(V,Map)
+                end.
 
 % the translation logic 
 translate(zero) -> {["zero"],[],"zero"};
@@ -40,6 +37,8 @@ translate({prefix, Action, Process}) ->
     {States, Trans, Initial} = translate(Process),
     
     NState = newPrefix(Action,Initial),
+
+    Nid = updateTab({prefix, Action}),
     
     {addStates(States,[NState]), [{NState,Action,Initial}] ++ Trans, NState};
 translate({choise, Process1, Process2}) -> 
