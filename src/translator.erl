@@ -6,7 +6,7 @@
                 {choise, ast(), ast()}  |
                 zero.
 
-% a transition from s to s' with action a
+% a transition from s to s' with action af
 -type trans() :: {string(),atom(),string()}.
 % The Lts System
 -type lts() :: {[string()],[trans()],string()}.
@@ -28,6 +28,7 @@ alterTrans(Origin,[{_,Action,Dest}|L]) ->
 % helper function to create States
 newPrefix(A,State) -> atom_to_list(A) ++ "." ++ State.
 newChoise(State1,State2) -> State1 ++ " + " ++ State2.
+newState() -> .
 
 % the translation logic 
 translate(zero) -> {["zero"],[],"zero"};
@@ -36,9 +37,7 @@ translate({prefix, Action, Process}) ->
     
     NState = newPrefix(Action,Initial),
     
-    {addStates(States,[NState]), 
-     [{NState,Action,Initial}] ++ Trans, 
-     NState};
+    {addStates(States,[NState]), [{NState,Action,Initial}] ++ Trans, NState};
 translate({choise, Process1, Process2}) -> 
     {States1, Trans1, Initial1} = translate(Process1),
     {States2, Trans2, Initial2} = translate(Process2),
@@ -46,6 +45,4 @@ translate({choise, Process1, Process2}) ->
     NState = newChoise(Initial1,Initial2),
     NTrans = alterTrans(NState,Trans1) ++ alterTrans(NState,Trans2),
 
-    {addStates(States1,States2), 
-     NTrans, 
-     NState}.
+    {addStates(States1,States2), NTrans, NState}.
