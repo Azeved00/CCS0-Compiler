@@ -27,8 +27,12 @@ alterTrans(Origin,[{_,Action,Dest}|L]) ->
 
 % helper function to create States
 newPrefix(A,State) -> atom_to_list(A) ++ "." ++ State.
+<<<<<<< HEAD
 newChoise(State1,State2) -> State1 ++ " + " ++ State2.
 newState() -> .
+=======
+newChoise(State1,State2) -> "(" ++ State1 ++ " + " ++ State2 ++ ")".
+>>>>>>> 7dd56cfbfed374f053a9b6020340f1463c4cc41d
 
 % the translation logic 
 translate(zero) -> {["zero"],[],"zero"};

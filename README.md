@@ -4,19 +4,32 @@
 A Server &amp; a compiler to compile CCS0 to LTS
 
 ## Compiling & Running
-### Compiling And Starting the server
 
-	c(server).
-	register(serveralias, server:start()).
+### Initiating the server
+
+To start using the program first you set up the Server using :
+
+	$ erl -name server_name
+	(server_name@host)1> c(server).
+	(server_name@host)2> server:start().
 	
-You can chose the `serveralias` freely
- 
-### Querying the server
+### Initiating and using the client
 
- 	server:translate(serveralias, AST).
+To start using the program first you set up the Server using :
 
-if you changed `serveralias` in the previous command don't forget to also change it in this command.
+	$ erl -name client_name
+	(client_name@host)1> c(client).
+	(client_name@host)2> client:getLTS('server_name@host', CCS0_Expression).
 
-### Example
+## Example
+In the server
 
-	server:translate(serveralias, {choise, {prefix, 'a', {prefix, 'b', zero}}, {prefix, 'c', zero}}.
+	$ erl -name gandalf
+	(gandalf@myhost)1> c(server).
+	(gandalf@myhost)2> server:start().
+	
+In the client
+	
+	$ erl -name bilbo
+	(bilbo@host)1> c(client).
+	(bilbo@host)2> client:getLTS('gandalf@myhost', "a.b.0").
