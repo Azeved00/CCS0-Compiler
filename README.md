@@ -33,3 +33,13 @@ In the client
 	$ erl -sname bilbo
 	(bilbo@host)1> c(client).
 	(bilbo@host)2> client:getLTS('gandalf@myhost', "a.b.0").
+	
+## Other Notes
+
+It is possible use the client and the server in the same terminal,
+
+It is also possible to get the CCS0 AST that the client Generates using the command
+	
+	client:getAST(ccs0_term).
+	
+The `ccs0_term` being a `string`.
