@@ -3,7 +3,7 @@
 -export([start/0,getLTS/1,stop/0]).
 
 
--type ast() :: {prefix, string(), ast()} | {choise, ast(), ast()}.
+-type ast() :: {prefix, string(), ast()} | {choice, ast(), ast()}.
 
 
 start() -> register(server, spawn(fun() -> loop(0) end)).

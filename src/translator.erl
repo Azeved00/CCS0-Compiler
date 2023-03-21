@@ -25,13 +25,13 @@ translate(Map, {prefix, Action, Process}) ->
     State = maps:get(NState,NTab),
     
     {NTab,[{State,Action,Initial}] ++ Trans, {NState,State}};
-translate(Map, {choise, Process1, Process2}) -> 
+translate(Map, {choice, Process1, Process2}) -> 
     {Tab1, Trans1, {Initial1,_}} = translate(Map,Process1),
     Tab1T = maps:remove(Initial1,Tab1),
     {Tab2, Trans2, {Initial2,_}} = translate(Tab1T,Process2),
     Tab2T = maps:remove(Initial2,Tab2),
     
-    NState = {choise, Process1, Process2},
+    NState = {choice, Process1, Process2},
     NTab =  updateTab(Tab2T,NState),
     State = maps:get(NState,NTab),
     NTrans = alterTrans(State,Trans1) ++ alterTrans(State,Trans2),
