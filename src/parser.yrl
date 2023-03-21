@@ -2,6 +2,8 @@ Nonterminals proc.
 Terminals atom integer '(' ')' '+' '.'.
 Rootsymbol proc.
 
+Left 200 '.'.
+Left 100 '+'.
 
 proc -> atom '.' proc           : {prefix, value_of('$1'), '$3'}.
 proc -> proc '+' proc           : {choise, '$1', '$3'}.
